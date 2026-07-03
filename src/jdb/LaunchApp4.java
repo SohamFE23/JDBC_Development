@@ -2,15 +2,17 @@ package jdb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
-public class LaunchApp3 {
+public class LaunchApp4 {
 
 	public static void main(String args[]){
 		Connection connect=null;
-		Statement statement=null;
+		PreparedStatement statement=null;
 		
 		
 		try {
@@ -21,11 +23,30 @@ public class LaunchApp3 {
 //			String user="root";
 //			String password="####";
 //			connect = DriverManager.getConnection(url,user,password);
-			statement = connect.createStatement();
+			String query="INSERT into STUDENT(id, Name, fees_paid, admission_date) VALUES(?,?,?,?)";
+			statement = connect.prepareStatement(query);
 			
-			String sql= "INSERT INTO STUDENT(id, Name, fees_paid, admission_date) VALUES(5,'Prashik Suradkar',900,'2025-07-27')";
-			
-			int rows = statement.executeUpdate(sql);
+			 System.out.println("Please enter the following details to be stored in db");
+			 Scanner scan = new Scanner(System.in);
+			 
+			 System.out.println("Enter your id");
+			 Integer id=scan.nextInt();
+			 
+			 System.out.println("Enter your Name");
+			 String name=scan.next();
+			 
+			 System.out.println("Enter your fees_paid");
+			 Integer fees=scan.nextInt();
+			 
+			 System.out.print("Enter Admission Date (yyyy-MM-dd): ");
+			 String date = scan.next();
+			 
+			 statement.setInt(1, id);
+			 statement.setString(2, name);
+			 statement.setInt(3, fees);
+			 statement.setDate(4,java.sql.Date.valueOf(date));
+			 
+			int rows=statement.executeUpdate();
 			if(rows>0) {
 				System.out.println("Record Inserted");
 			}
@@ -33,13 +54,7 @@ public class LaunchApp3 {
 				System.out.println("Record Not Inserted");
 			}
 			
-			String sql1="Select * from STUDENT";
-			ResultSet rs= statement.executeQuery(sql1);
 			
-			while(rs.next()) {
-				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3)+" "+rs.getDate(4));
-			}
-			rs.close();
 			
 		}
 		catch(SQLException e) {
