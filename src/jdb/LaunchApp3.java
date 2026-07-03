@@ -14,6 +14,7 @@ public class LaunchApp3 {
 		
 		
 		try {
+//			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			connect=JdbcUtil.getConnection();
 //			String url="jdbc:mysql://localhost:3306/COLLEGE--.";
